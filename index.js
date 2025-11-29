@@ -8,6 +8,7 @@ const PDFPermission = {
     PRINT: "print",
     COPY: "copy",
     ANNOTATE: "annotate",
+    MODIFY: "modify",
     FORMS: "forms",
     ASSEMBLE: "assemble",
     ALL: "all",

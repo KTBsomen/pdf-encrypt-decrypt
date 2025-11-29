@@ -22,6 +22,7 @@ type PDFPermission string
 const (
 	PermPrint    PDFPermission = "print"
 	PermCopy     PDFPermission = "copy"
+	PermModify   PDFPermission = "modify"
 	PermAnnotate PDFPermission = "annotate"
 	PermForms    PDFPermission = "forms"
 	PermAssemble PDFPermission = "assemble"
@@ -46,8 +47,11 @@ func buildPermissionMask(perms []string) model.PermissionFlags {
 			mask |= model.PermissionAssembleRev3
 		case PermAll:
 			mask |= model.PermissionsAll
+		case PermModify:
+			mask |= model.PermissionModify
 		case PermDefault:
 			mask |= model.PermissionsNone
+
 		}
 	}
 

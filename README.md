@@ -2,6 +2,9 @@
 
 A high-performance Node.js library for encrypting and decrypting PDF files using a Go-based native library. This library uses FFI (Foreign Function Interface) to call compiled Go functions from Node.js, providing the speed of Go with the convenience of JavaScript.
 
+### ⚠️ Not tested for mac, you can build it if you have mac and submit a pull request
+
+
 ## 📚 Table of Contents
 
 - [Understanding PDF Security](#understanding-pdf-security)
@@ -47,18 +50,16 @@ Permissions control **what actions users can perform** on an encrypted PDF. Even
 
 #### Available Permissions:
 
-| Permission | Code | What It Allows |
-|-----------|------|----------------|
-| **Print** | `PDFPermission.PRINT` | Print the document at low resolution |
-| **High-Res Print** | `PDFPermission.HI_RES_PRINT` | Print at high resolution (professional quality) |
-| **Copy** | `PDFPermission.COPY` | Copy text and graphics from the document |
-| **Modify** | `PDFPermission.MODIFY` | Edit the document content |
-| **Annotate** | `PDFPermission.ANNOTATE` | Add comments, highlights, and annotations |
-| **Fill Forms** | `PDFPermission.FORMS` | Fill in form fields |
-| **Assemble** | `PDFPermission.ASSEMBLE` | Insert, delete, or rotate pages |
-| **Accessibility** | `PDFPermission.ACCESSIBILITY` | Extract text for screen readers (accessibility tools) |
-| **All** | `PDFPermission.ALL` | Grant all permissions |
-| **Default** | `PDFPermission.DEFAULT` | No permissions (most restrictive) |
+| Permission     | Code                     | What It Allows                            |
+| -------------- | ------------------------ | ----------------------------------------- |
+| **Print**      | `PDFPermission.PRINT`    | Print the document at low resolution      |
+| **Copy**       | `PDFPermission.COPY`     | Copy text and graphics from the document  |
+| **Modify**     | `PDFPermission.MODIFY`   | Modify the pdf contents                   |
+| **Annotate**   | `PDFPermission.ANNOTATE` | Add comments, highlights, and annotations |
+| **Fill Forms** | `PDFPermission.FORMS`    | Fill in form fields                       |
+| **Assemble**   | `PDFPermission.ASSEMBLE` | Insert, delete, or rotate pages           |
+| **All**        | `PDFPermission.ALL`      | Grant all permissions                     |
+| **Default**    | `PDFPermission.DEFAULT`  | No permissions (most restrictive)         |
 
 #### Real-World Examples:
 
@@ -440,13 +441,11 @@ Available permission constants:
 
 ```javascript
 PDFPermission.PRINT          // Low-resolution printing
-PDFPermission.HI_RES_PRINT   // High-resolution printing
 PDFPermission.COPY           // Copy text and graphics
-PDFPermission.MODIFY         // Modify document content
+PDFPermission.MODIFY         // Modify
 PDFPermission.ANNOTATE       // Add annotations
 PDFPermission.FORMS          // Fill form fields
 PDFPermission.ASSEMBLE       // Assemble document (insert/delete pages)
-PDFPermission.ACCESSIBILITY  // Extract for accessibility
 PDFPermission.ALL            // All permissions
 PDFPermission.DEFAULT        // No permissions
 ```

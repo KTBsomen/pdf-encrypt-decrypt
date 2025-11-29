@@ -1,16 +1,66 @@
 {
-  "name": "encrypt_pdf",
+  "name": "pdf-encrypt-decrypt",
   "version": "1.0.0",
-  "description": "",
+  "description": "High-performance PDF encryption and decryption library for Node.js. Supports AES-256, owner/user passwords, PDF permissions, secure document protection, and fast PDF processing via native Go shared libraries.",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "pdf",
+    "pdf encryption",
+    "pdf decrypt",
+    "pdf decryptor",
+    "pdf encrypt",
+    "encrypt pdf",
+    "decrypt pdf",
+    "pdf security",
+    "pdf protection",
+    "aes",
+    "aes256",
+    "aes-256",
+    "password protect pdf",
+    "unlock pdf",
+    "lock pdf",
+    "secure pdf",
+    "pdfcpu",
+    "pdf permissions",
+    "pdf-utils",
+    "pdf tools",
+    "pdf processing",
+    "pdf library",
+    "pdf toolkit",
+    "pdf password",
+    "pdf encoder",
+    "pdf decoder",
+    "pdf restrict",
+    "pdf allow",
+    "pdf permissions",
+    "pdf drm",
+    "node-pdf",
+    "nodejs pdf encryption",
+    "go pdf",
+    "cgo",
+    "native addon",
+    "ffi",
+    "koffi",
+    "node pdf encrypt library",
+    "library for encrypting pdf",
+    "pdf document security"
+  ],
+  "homepage": "https://github.com/KTBsomen/pdf-encrypt-decrypt#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KTBsomen/pdf-encrypt-decrypt.git"
+  },
+  "author": "Somen",
+  "license": "MIT",
   "dependencies": {
-    "ffi-rs": "^1.3.1",
     "koffi": "^2.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
   }
 }
