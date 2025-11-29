@@ -2,7 +2,7 @@
 
 A high-performance Node.js library for encrypting and decrypting PDF files using a Go-based native library. This library uses FFI (Foreign Function Interface) to call compiled Go functions from Node.js, providing the speed of Go with the convenience of JavaScript.
 
-### ⚠️ Not tested for mac, you can build it if you have mac and submit a pull request
+### ⚠️ Not tested for mac,try to test it and submit a pull request
 
 
 ## 📚 Table of Contents
