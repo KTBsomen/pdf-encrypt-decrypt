@@ -75,7 +75,7 @@ jobs:
       - name: Debug - Check src directory
         run: |
           echo "=== Files in src/ ==="
-          ls -lah src/ || dir src
+          ls src/ || dir src
           echo ""
           echo "=== Check for go.mod ==="
           test -f src/go.mod && echo "✓ go.mod exists" || echo "✗ go.mod NOT found"
@@ -107,7 +107,7 @@ jobs:
       - name: Verify build output
         run: |
           echo "=== Files in lib/ ==="
-          ls -lh lib/
+          ls lib/
           echo ""
           echo "=== File information ==="
           file lib/${{ matrix.outfile }} || echo "file command not available"
