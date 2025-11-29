@@ -1,4 +1,4 @@
-name: Build PDF Encrypt/Decrypt Libraries
+name: Build PDF Encrypt/Decrypt Libraries (Debug Mode)
 
 on:
   push:
@@ -9,8 +9,9 @@ jobs:
   build:
     name: Build binaries for all platforms
     runs-on: ${{ matrix.os }}
-
+    
     strategy:
+      fail-fast: false  # Continue other builds even if one fails
       matrix:
         include:
           - os: ubuntu-latest
@@ -18,45 +19,126 @@ jobs:
             goarch: amd64
             ext: .so
             outfile: pdfencrypt_linux_x64.so
-
+          
           - os: windows-latest
             goos: windows
             goarch: amd64
             ext: .dll
             outfile: pdfencrypt_win_x64.dll
-
-          - os: macos-latest
+          
+          - os: macos-13
             goos: darwin
             goarch: amd64
             ext: .dylib
             outfile: pdfencrypt_darwin_x64.dylib
-
+          
           - os: macos-latest
             goos: darwin
             goarch: arm64
             ext: .dylib
             outfile: pdfencrypt_darwin_arm64.dylib
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
+      - name: Debug - Show environment
+        run: |
+          echo "=== OS Information ==="
+          uname -a || ver
+          echo ""
+          echo "=== Current Directory ==="
+          pwd
+          echo ""
+          echo "=== Directory Structure ==="
+          ls -R || dir /s
+          echo ""
+          echo "=== Environment Variables ==="
+          env | grep -E '(GO|CGO|GOOS|GOARCH)' || echo "No Go-related env vars"
+      
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
-
-      - name: Build shared library
-        env:
-          CGO_ENABLED: 1
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
+          go-version: "1.23"
+      
+      - name: Debug - Verify Go installation
         run: |
-          echo "Building for $GOOS $GOARCH"
-          go build -buildmode=c-shared -o lib/${{ matrix.outfile }} ./src
-
+          echo "=== Go Version ==="
+          go version
+          echo ""
+          echo "=== Go Environment ==="
+          go env
+          echo ""
+          echo "=== CGO Status ==="
+          go env CGO_ENABLED
+      
+      - name: Create lib directory
+        run: mkdir -p lib
+      
+      - name: Debug - Check src directory
+        run: |
+          echo "=== Files in src/ ==="
+          ls -lah src/ || dir src
+          echo ""
+          echo "=== Check for go.mod ==="
+          test -f src/go.mod && echo "✓ go.mod exists" || echo "✗ go.mod NOT found"
+          echo ""
+          echo "=== Check for main.go ==="
+          test -f src/main.go && echo "✓ main.go exists" || echo "✗ main.go NOT found"
+      
+      - name: Install dependencies (Go modules)
+        working-directory: ./src
+        run: |
+          echo "=== Downloading dependencies ==="
+          go mod download
+          echo ""
+          echo "=== Verifying dependencies ==="
+          go mod verify
+          echo ""
+          echo "=== Listing dependencies ==="
+          go list -m all
+      
+      - name: Build shared library
+        working-directory: ./src
+        env:
+          CGO_ENABLED: "1"
+        run: |
+          echo "Building for ${{ matrix.goos }} ${{ matrix.goarch }}"
+          echo "Output: ../lib/${{ matrix.outfile }}"
+          go build -v -buildmode=c-shared -o ../lib/${{ matrix.outfile }} main.go
+      
+      - name: Verify build output
+        run: |
+          echo "=== Files in lib/ ==="
+          ls -lh lib/
+          echo ""
+          echo "=== File information ==="
+          file lib/${{ matrix.outfile }} || echo "file command not available"
+          echo ""
+          echo "=== File size ==="
+          du -h lib/${{ matrix.outfile }} || echo "Size check not available"
+      
+      - name: Test library loading (Linux/Mac only)
+        if: runner.os != 'Windows'
+        run: |
+          echo "=== Checking library symbols ==="
+          nm -D lib/${{ matrix.outfile }} | grep -E '(EncryptPDF|DecryptPDF)' || echo "Symbols not found or nm not available"
+      
       - name: Upload compiled library
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.outfile }}
           path: lib/${{ matrix.outfile }}
+          retention-days: 30
+      
+      - name: Debug - Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-logs-${{ matrix.os }}-${{ matrix.goarch }}
+          path: |
+            **/*.log
+            **/go.mod
+            **/go.sum
+          retention-days: 7
+          if-no-files-found: ignore
